@@ -2,7 +2,10 @@
 title: "R Project 1 - Hello R"
 author: "Neandrea Lee"
 date: "Due Sept 8th"
-output: html_document
+output: 
+  html_document: 
+    fig_width: 9
+    fig_height: 7
 ---
 
 MAKE SURE YOU READ AND FOLLOW **ALL** INSTRUCTIONS ON THE INSTRUCTION DOCUMENT. 
@@ -39,14 +42,13 @@ dino_data %>%
 
 ### Exercise 3
 
-In this exercise we have plotted for star set
+In this exercise we code the x y plots for star set
 
 ```{r plot-star}
 star_data <- datasaurus_dozen %>%
   filter(dataset == "star")
 ggplot(data = star_data, mapping = aes(x = x, y = y)) +
   geom_point()
-
 ```
 
 We now calculate the x y correlation for the star data set
@@ -54,23 +56,44 @@ We now calculate the x y correlation for the star data set
 ```{r cor-star}
 star_data %>%
   summarize(r = cor(x, y))
-
 ```
+The sizes are that far off, with a 0.0015 diff but r dino is larger
 
 ### Exercise 4
 
-(Add code and narrative as needed. Note that two R chunks are given but they are not labeled. Use the convention from above to name them appropriately.)
+Here we have added code for the x y circle set
 
-```{r}
-
-
+```{r plot-circle}
+circle_data <- datasaurus_dozen %>%
+  filter(dataset == "circle")
+ggplot(data = circle_data, mapping = aes(x = x, y = y)) +
+  geom_point()
 ```
+Last but not least we calculate the correlation of x y for circle 
 
-```{r}
-
-
+```{r cor-circle}
+circle_data %>%
+  summarize(r = cor(x, y))
 ```
+The sizes are that far off, with a 0.0038 diff but r circle is larger
 
 ### Exercise 5
 
-(Add code and narrative as needed. To add R chunks either type out the backticks, curly braces, and the letter `r` or use the Insert chunk button above, with the green +C.)
+Finally we plot all the data sets together
+
+```{r plot-all data sets}
+ggplot(datasaurus_dozen, aes(x = x, y = y, color = dataset))+ 
+  geom_point()+
+  facet_wrap(~ dataset, ncol = 3) +
+  theme(legend.position = "none")
+
+```
+Final correlation coefficient of all data sets
+
+```{r}
+datasaurus_dozen %>%
+  group_by(dataset) %>%
+  summarize(r = cor(x, y)) %>%
+  print(13)
+```
+
